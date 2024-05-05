@@ -22,7 +22,24 @@
 //
 Collision CheckCollision(Object &obj1, Object &obj2)
 {
-    return Collision {};
+    Vector2 d;
+    d.x = abs(obj2.position.x - obj1.position.x);
+    d.y = abs(obj2.position.y - obj1.position.y);
+    Vector2 q;
+    q.x = d.x - (obj2.collider.width + obj1.collider.width) / 2;
+    q.y = d.y - (obj2.collider.height + obj1.collider.height) / 2;
+    Collision c;
+    if (q.x < 0 && q.y < 0){
+        c.exists = true;
+        c.overlap.x = q.x;
+        c.overlap.y = q.y;
+    }
+    else {
+        c.exists = false;
+        c.overlap.x = 0;
+        c.overlap.y = 0;
+    }
+    return c;
 }
 
 // Задание SolveCollision.
