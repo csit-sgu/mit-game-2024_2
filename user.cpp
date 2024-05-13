@@ -28,18 +28,12 @@ Collision CheckCollision(Object &obj1, Object &obj2)
     Vector2 q;
     q.x = d.x - (obj2.collider.width + obj1.collider.width) / 2;
     q.y = d.y - (obj2.collider.height + obj1.collider.height) / 2;
-    Collision c;
     if (q.x < 0 && q.y < 0){
-        c.exists = true;
-        c.overlap.x = q.x;
-        c.overlap.y = q.y;
+        return {true, q};
     }
     else {
-        c.exists = false;
-        c.overlap.x = 0;
-        c.overlap.y = 0;
+        return {false, {0, 0}};
     }
-    return c;
 }
 
 // Задание SolveCollision.
