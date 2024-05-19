@@ -23,12 +23,14 @@
 Collision CheckCollision(Object &obj1, Object &obj2)
 {
     Vector2 d;
-    d.x = abs(obj2.position.x - obj1.position.x);
-    d.y = abs(obj2.position.y - obj1.position.y);
+    d.x = obj2.position.x - obj1.position.x;
+    d.y = obj2.position.y - obj1.position.y;
     Vector2 q;
-    q.x = d.x - (obj2.collider.width + obj1.collider.width) / 2;
-    q.y = d.y - (obj2.collider.height + obj1.collider.height) / 2;
+    q.x = abs(d.x) - (obj2.collider.width + obj1.collider.width) / 2;
+    q.y = abs(d.y) - (obj2.collider.height + obj1.collider.height) / 2;
     if (q.x < 0 && q.y < 0){
+        q.x *= (d.x < 0 ? 1 : -1);
+        q.y *= (d.y < 0 ? 1 : -1);
         return {true, q};
     }
     else {
