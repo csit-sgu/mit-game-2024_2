@@ -197,6 +197,12 @@ bool CheckPlayerDeath(Object &player, Scene &scene)
 //
 bool CheckFinish(Object &player, Scene &scene)
 {
+    for (auto& obj : scene) {
+        if (obj.finish.enabled) {
+            Collision collision = CheckCollision(player, obj);
+            if (collision.exists) return true;
+        }
+    }
     return false;
 }
 
