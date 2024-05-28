@@ -22,7 +22,20 @@
 //
 Collision CheckCollision(Object &obj1, Object &obj2)
 {
-    return Collision {};
+    Vector2 d;
+    d.x = obj2.position.x - obj1.position.x;
+    d.y = obj2.position.y - obj1.position.y;
+    Vector2 q;
+    q.x = abs(d.x) - (obj2.collider.width + obj1.collider.width) / 2;
+    q.y = abs(d.y) - (obj2.collider.height + obj1.collider.height) / 2;
+    if (q.x < 0 && q.y < 0){
+        q.x *= (d.x < 0 ? 1 : -1);
+        q.y *= (d.y < 0 ? 1 : -1);
+        return {true, q};
+    }
+    else {
+        return {false, {0, 0}};
+    }
 }
 
 // Задание SolveCollision.
