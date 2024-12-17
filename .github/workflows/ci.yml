@@ -1,4 +1,4 @@
-name: MIT-GAME-CI
+name: C++ CI
 
 on:
   push:
@@ -18,33 +18,24 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up CMake
-      run: sudo apt-get install -y cmake
+      run: |
+        if [[ "${{ matrix.os }}" == "ubuntu-latest" ]]; then
+          sudo apt-get update && sudo apt-get install -y cmake;
+        elif [[ "${{ matrix.os }}" == "windows-latest" ]]; then
+          choco install cmake --version 3.19.0;
+        elif [[ "${{ matrix.os }}" == "macos-latest" ]]; then
+          brew install cmake;
+        fi
 
     - name: Build Debug
       run: |
         chmod +x ./maker.sh
         ./maker.sh debug
-      if: matrix.os == 'ubuntu-latest'
 
-    - name: Build Release for Linux
+    - name: Build Release
       run: |
         chmod +x ./maker.sh
         ./maker.sh build
-      if: matrix.os == 'ubuntu-latest'
-
-    - name: Build Release for Windows
-      run: |
-        choco install cmake --version 3.19.0
-        chmod +x ./maker.sh
-        ./maker.sh build
-      if: matrix.os == 'windows-latest'
-
-    - name: Build Release for macOS
-      run: |
-        brew install cmake
-        chmod +x ./maker.sh
-        ./maker.sh build
-      if: matrix.os == 'macos-latest'
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
