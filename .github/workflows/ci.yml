@@ -1,0 +1,53 @@
+name: MIT-GAME-CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up CMake
+      run: sudo apt-get install -y cmake
+
+    - name: Build Debug
+      run: |
+        chmod +x ./maker.sh
+        ./maker.sh debug
+      if: matrix.os == 'ubuntu-latest'
+
+    - name: Build Release for Linux
+      run: |
+        chmod +x ./maker.sh
+        ./maker.sh build
+      if: matrix.os == 'ubuntu-latest'
+
+    - name: Build Release for Windows
+      run: |
+        choco install cmake --version 3.19.0
+        chmod +x ./maker.sh
+        ./maker.sh build
+      if: matrix.os == 'windows-latest'
+
+    - name: Build Release for macOS
+      run: |
+        brew install cmake
+        chmod +x ./maker.sh
+        ./maker.sh build
+      if: matrix.os == 'macos-latest'
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: ${{ runner.os }}-build
+        path: ./Build/*
